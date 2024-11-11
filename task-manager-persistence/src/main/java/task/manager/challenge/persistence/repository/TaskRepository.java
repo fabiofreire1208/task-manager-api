@@ -10,6 +10,7 @@ import task.manager.challenge.domain.enums.TaskPriority;
 import task.manager.challenge.domain.enums.TaskStatus;
 import task.manager.challenge.persistence.model.TaskEntity;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -26,4 +27,10 @@ public interface TaskRepository extends JpaRepository<TaskEntity, UUID> {
                                  @Param("status") TaskStatus status,
                                  @Param("projectId") UUID projectId,
                                  Pageable pageable);
+
+    @Query("SELECT t FROM TaskEntity t " +
+            "LEFT JOIN FETCH t.watchers w " +
+            "LEFT JOIN FETCH w.devices " +
+            "WHERE t.id = :taskId")
+    Optional<TaskEntity> findByIdWithWatchersAndDevices(@Param("taskId") UUID taskId);
 }

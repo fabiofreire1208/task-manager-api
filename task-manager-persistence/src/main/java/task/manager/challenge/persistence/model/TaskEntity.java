@@ -47,5 +47,5 @@ public class TaskEntity {
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<UserEntity> watchers;
+    private Set<UserEntity> watchers;
 }

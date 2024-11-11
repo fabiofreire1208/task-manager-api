@@ -26,6 +26,10 @@
             <groupId>task.manager.challenge</groupId>
             <artifactId>task-manager-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>task.manager.challenge</groupId>
+            <artifactId>task-manager-persistence</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
