@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  task-manager-db:
+    image: postgres:16-alpine
+    restart: always
+    networks:
+      - my-custom-network
+    environment:
+      POSTGRES_DB: task-manager-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - task-manager-db-data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    networks:
+      - my-custom-network
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.com
+      PGADMIN_DEFAULT_PASSWORD: mypgadminpass
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - task-manager-db
+
+  task-manager-ms:
+    hostname: task-manager-ms
+    container_name: task-manager-ms
+    networks:
+      - my-custom-network
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    networks:
+      - my-custom-network
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    networks:
+      - my-custom-network
+    depends_on:
+      - zookeeper
+    restart: "no"
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+volumes:
+  task-manager-db-data:
+  pgadmin_data:
+
+networks:
+  my-custom-network:
+    driver: bridge
