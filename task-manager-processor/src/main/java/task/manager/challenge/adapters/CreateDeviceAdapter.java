@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import task.manager.challenge.core.business.CreateDevicePort;
 import task.manager.challenge.core.command.Context;
+import task.manager.challenge.core.exception.UserNotFoundException;
 import task.manager.challenge.core.persistence.DeviceRepositoryPort;
 import task.manager.challenge.core.persistence.UserRepositoryPort;
 import task.manager.challenge.domain.model.Device;
@@ -26,7 +27,7 @@ public class CreateDeviceAdapter implements CreateDevicePort {
     public Optional<Device> process(Context context) {
         final Device data = context.getData(Device.class);
         final User user = userRepositoryPort.getByEmail(data.getUser().getEmail()).orElseThrow(
-                () -> new RuntimeException("User not found!")
+                () -> new UserNotFoundException("User not found!")
         );
         data.setUser(user);
         return Optional.ofNullable(deviceRepositoryPort.save(data));

@@ -21,7 +21,12 @@ public interface TaskRepository extends JpaRepository<TaskEntity, UUID> {
             "WHERE (:userId IS NULL OR t.assignedUser.id = :userId) " +
             "AND (:priority IS NULL OR t.priority = :priority) " +
             "AND (:status IS NULL OR t.status = :status) " +
-            "AND (:projectId IS NULL OR t.project.id = :projectId)")
+            "AND (:projectId IS NULL OR t.project.id = :projectId)" +
+            "ORDER BY " +
+            "CASE WHEN t.priority = 'HIGH' THEN 1 " +
+            "WHEN t.priority = 'NORMAL' THEN 2 " +
+            "WHEN t.priority = 'LOW' THEN 3 END ASC, " + // Sort by priority (highest first)
+            "t.deadline ASC")
     Page<TaskEntity> filterTasks(@Param("userId") UUID userId,
                                  @Param("priority") TaskPriority priority,
                                  @Param("status") TaskStatus status,

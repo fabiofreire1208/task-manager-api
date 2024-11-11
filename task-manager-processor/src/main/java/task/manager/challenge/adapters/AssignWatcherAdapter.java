@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import task.manager.challenge.core.business.AssignWatcherPort;
 import task.manager.challenge.core.command.Context;
+import task.manager.challenge.core.exception.TaskNotFoundException;
+import task.manager.challenge.core.exception.UserNotFoundException;
 import task.manager.challenge.core.persistence.ProjectRepositoryPort;
 import task.manager.challenge.core.persistence.TaskRepositoryPort;
 import task.manager.challenge.core.persistence.UserRepositoryPort;
@@ -28,12 +30,12 @@ public class AssignWatcherAdapter implements AssignWatcherPort {
     public Optional<Task> process(Context context) {
         final Task data = context.getData(Task.class);
         final Task task = taskRepositoryPort.get(data.getId()).orElseThrow(
-                () -> new RuntimeException("Task not found!")
+                () -> new TaskNotFoundException("Task not found!")
         );
 
         List<User> users = data.getWatchers().stream()
                 .map(user -> userRepositoryPort.get(user.getId())
-                        .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + user.getId())))
+                        .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + user.getId())))
                 .toList();
 
         task.getWatchers().addAll(users);

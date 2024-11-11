@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import task.manager.challenge.core.business.CreateTaskPort;
 import task.manager.challenge.core.command.Context;
+import task.manager.challenge.core.exception.ProjectNotFoundException;
+import task.manager.challenge.core.exception.UserNotFoundException;
 import task.manager.challenge.core.persistence.ProjectRepositoryPort;
 import task.manager.challenge.core.persistence.TaskRepositoryPort;
 import task.manager.challenge.core.persistence.UserRepositoryPort;
@@ -30,11 +32,11 @@ public class CreateTaskAdapter implements CreateTaskPort {
     public Optional<Task> process(Context context) {
         final Task data = context.getData(Task.class);
         final User userToAssign = userRepositoryPort.get(data.getAssignedUser().getId()).orElseThrow(
-                () -> new RuntimeException("User not found!")
+                () -> new UserNotFoundException("User not found!")
         );
 
         final Project project = projectRepositoryPort.get(data.getProject().getId()).orElseThrow(
-                () -> new RuntimeException("Project not found!")
+                () -> new ProjectNotFoundException("Project not found!")
         );
 
         return Optional.ofNullable(taskRepositoryPort.save(data));

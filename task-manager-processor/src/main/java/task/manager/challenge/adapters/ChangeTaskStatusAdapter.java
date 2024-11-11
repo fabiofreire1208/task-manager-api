@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import task.manager.challenge.core.business.ChangeTaskStatusPort;
 import task.manager.challenge.core.command.Context;
+import task.manager.challenge.core.exception.TaskNotFoundException;
 import task.manager.challenge.core.messaging.NotificationEventProducerPort;
 import task.manager.challenge.core.persistence.TaskRepositoryPort;
-import task.manager.challenge.core.persistence.UserRepositoryPort;
 import task.manager.challenge.domain.enums.TaskStatus;
 import task.manager.challenge.domain.model.Task;
 import task.manager.challenge.persistence.mappers.PersistenceEntityMapper;
@@ -31,7 +31,7 @@ public class ChangeTaskStatusAdapter implements ChangeTaskStatusPort {
     public Void process(Context context) {
         final UUID data = context.getData(UUID.class);
         final Task task = taskRepositoryPort.get(data).orElseThrow(
-                () -> new RuntimeException("Task not found!")
+                () -> new TaskNotFoundException("Task not found!")
         );
 
         final TaskStatus status = context.getStatus();
