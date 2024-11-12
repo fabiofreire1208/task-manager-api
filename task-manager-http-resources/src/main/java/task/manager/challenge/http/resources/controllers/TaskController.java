@@ -5,10 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import task.manager.challenge.core.business.AssignWatcherPort;
-import task.manager.challenge.core.business.ChangeTaskStatusPort;
-import task.manager.challenge.core.business.CreateTaskPort;
-import task.manager.challenge.core.business.FilterTaskPort;
+import task.manager.challenge.core.business.*;
 import task.manager.challenge.core.command.Context;
 import task.manager.challenge.domain.enums.TaskPriority;
 import task.manager.challenge.domain.enums.TaskStatus;
@@ -16,6 +13,7 @@ import task.manager.challenge.domain.model.Task;
 import task.manager.challenge.http.resources.dto.TaskDto;
 import task.manager.challenge.http.resources.dto.TaskResponseDto;
 import task.manager.challenge.http.resources.dto.TaskStatusDto;
+import task.manager.challenge.http.resources.dto.UserAssignDto;
 import task.manager.challenge.http.resources.mappers.TaskModelMapper;
 
 import java.util.*;
@@ -28,14 +26,16 @@ public class TaskController {
     private final AssignWatcherPort assignWatcherPort;
     private final FilterTaskPort filterTaskPort;
     private final ChangeTaskStatusPort changeTaskStatusPort;
+    private final AssignUserPort assignUserPort;
     private final TaskModelMapper taskModelMapper;
 
     @Autowired
-    public TaskController(CreateTaskPort createTaskPort, AssignWatcherPort assignWatcherPort, FilterTaskPort filterTaskPort, ChangeTaskStatusPort changeTaskStatusPort, TaskModelMapper taskModelMapper) {
+    public TaskController(CreateTaskPort createTaskPort, AssignWatcherPort assignWatcherPort, FilterTaskPort filterTaskPort, ChangeTaskStatusPort changeTaskStatusPort, AssignUserPort assignUserPort, TaskModelMapper taskModelMapper) {
         this.createTaskPort = createTaskPort;
         this.assignWatcherPort = assignWatcherPort;
         this.filterTaskPort = filterTaskPort;
         this.changeTaskStatusPort = changeTaskStatusPort;
+        this.assignUserPort = assignUserPort;
         this.taskModelMapper = taskModelMapper;
     }
 
@@ -100,5 +100,15 @@ public class TaskController {
         return ResponseEntity.ok("Task status was updated successfully!");
     }
 
+    @PutMapping("/{taskId}/user/assign")
+    public ResponseEntity<String> updateTaskUserAssigned(@PathVariable UUID taskId, @RequestBody UserAssignDto userId) {
+        final Context context = new Context();
+        context.setData(taskId);
+        context.setUserId(userId.getUserId());
+
+        assignUserPort.process(context);
+
+        return ResponseEntity.ok("User assigned to the task was updated successfully!");
+    }
 
 }

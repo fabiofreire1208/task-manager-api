@@ -33,6 +33,6 @@ public class DeviceController {
 
         createDevicePort.process(context);
 
-        return ResponseEntity.ok("The devive was added to the user successfully!");
+        return ResponseEntity.ok("The device was added to the user successfully!");
     }
 }

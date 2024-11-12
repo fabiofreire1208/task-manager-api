@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class TaskManagerExceptionHandler {
 
-    // Handle general exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
