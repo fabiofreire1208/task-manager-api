@@ -75,33 +75,6 @@ public class FilterTaskAdapterTest {
         UUID projectId = UUID.randomUUID();
         Pageable pageable = Pageable.unpaged();
 
-        Page<Task> taskPage = new PageImpl<>(List.of()); // Empty page
-
-        Context context = new Context();
-        context.setUserId(userId);
-        context.setPriority(priority);
-        context.setStatus(status);
-        context.setProjectId(projectId);
-        context.setPageable(pageable);
-
-        when(taskRepositoryPort.filterTasks(userId, priority, status, projectId, pageable)).thenReturn(taskPage);
-
-        Optional<Page<Task>> result = filterTaskAdapter.process(context);
-
-        assertTrue(result.isPresent());
-        assertEquals(0, result.get().getContent().size());
-
-        verify(taskRepositoryPort, times(1)).filterTasks(userId, priority, status, projectId, pageable);
-    }
-
-    @Test
-    public void testProcess_NoTasksFound() {
-        UUID userId = UUID.randomUUID();
-        TaskPriority priority = TaskPriority.HIGH;
-        TaskStatus status = TaskStatus.OPENED;
-        UUID projectId = UUID.randomUUID();
-        Pageable pageable = Pageable.unpaged();
-
         Page<Task> taskPage = new PageImpl<>(List.of());
 
         Context context = new Context();
@@ -116,7 +89,7 @@ public class FilterTaskAdapterTest {
         Optional<Page<Task>> result = filterTaskAdapter.process(context);
 
         assertTrue(result.isPresent());
-        assertTrue(result.get().getContent().isEmpty());
+        assertEquals(0, result.get().getContent().size());
 
         verify(taskRepositoryPort, times(1)).filterTasks(userId, priority, status, projectId, pageable);
     }

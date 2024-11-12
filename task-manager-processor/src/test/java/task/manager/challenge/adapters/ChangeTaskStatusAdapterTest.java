@@ -42,7 +42,7 @@ public class ChangeTaskStatusAdapterTest {
 
         Task task = new Task();
         task.setId(taskId);
-        task.setStatus(TaskStatus.COMPLETED.name());
+        task.setStatus(TaskStatus.OPENED.name());
 
         Context context = new Context();
         context.setData(taskId);

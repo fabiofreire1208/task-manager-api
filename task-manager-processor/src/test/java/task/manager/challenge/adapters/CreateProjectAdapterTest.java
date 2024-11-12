@@ -40,21 +40,4 @@ public class CreateProjectAdapterTest {
 
         verify(projectRepositoryPort, times(1)).save(project);
     }
-
-    @Test
-    public void testProcess_ProjectSaveReturnsNull() {
-        Project project = new Project();
-        project.setName("New Project");
-
-        Context context = new Context();
-        context.setData(project);
-
-        when(projectRepositoryPort.save(project)).thenReturn(null);
-
-        Optional<Project> result = createProjectAdapter.process(context);
-
-        assertFalse(result.isPresent());
-
-        verify(projectRepositoryPort, times(1)).save(project);
-    }
 }

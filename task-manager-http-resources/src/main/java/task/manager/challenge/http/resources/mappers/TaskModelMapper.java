@@ -23,7 +23,6 @@ public interface TaskModelMapper {
     TaskResponseDto from(Task source);
 
     default List<User> mapWatcherIdsToUsers(List<UUID> watcherIds) {
-        // This should be replaced by the actual logic to fetch User objects from IDs
         return watcherIds != null ? watcherIds.stream().map(id -> {
             User user = new User();
             user.setId(id);

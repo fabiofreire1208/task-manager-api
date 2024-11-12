@@ -65,7 +65,6 @@ public class AssignWatcherAdapterTest {
         assertTrue(task.getWatchers().contains(watcher1));
         assertTrue(task.getWatchers().contains(watcher2));
 
-        // Verify interactions
         verify(taskRepositoryPort, times(1)).get(taskId);
         verify(userRepositoryPort, times(1)).get(watcherId1);
         verify(userRepositoryPort, times(1)).get(watcherId2);
@@ -74,7 +73,6 @@ public class AssignWatcherAdapterTest {
 
     @Test
     public void testProcess_TaskNotFound() {
-        // Arrange
         UUID taskId = UUID.randomUUID();
         UUID watcherId = UUID.randomUUID();
 
@@ -90,10 +88,8 @@ public class AssignWatcherAdapterTest {
 
         when(taskRepositoryPort.get(taskId)).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(TaskNotFoundException.class, () -> assignWatcherAdapter.process(context));
 
-        // Verify interactions
         verify(taskRepositoryPort, times(1)).get(taskId);
         verify(userRepositoryPort, never()).get(any());
         verify(taskRepositoryPort, never()).save(any());
@@ -101,7 +97,6 @@ public class AssignWatcherAdapterTest {
 
     @Test
     public void testProcess_UserNotFound() {
-        // Arrange
         UUID taskId = UUID.randomUUID();
         UUID watcherId = UUID.randomUUID();
 
@@ -122,10 +117,8 @@ public class AssignWatcherAdapterTest {
         when(taskRepositoryPort.get(taskId)).thenReturn(Optional.of(task));
         when(userRepositoryPort.get(watcherId)).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(UserNotFoundException.class, () -> assignWatcherAdapter.process(context));
 
-        // Verify interactions
         verify(taskRepositoryPort, times(1)).get(taskId);
         verify(userRepositoryPort, times(1)).get(watcherId);
         verify(taskRepositoryPort, never()).save(any());

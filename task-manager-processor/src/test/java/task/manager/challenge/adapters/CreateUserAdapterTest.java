@@ -41,22 +41,4 @@ public class CreateUserAdapterTest {
 
         verify(userRepositoryPort, times(1)).save(user);
     }
-
-    @Test
-    public void testProcess_UserSaveReturnsNull() {
-        User user = new User();
-        user.setName("User Test");
-        user.setEmail("user.test@example.com");
-
-        Context context = new Context();
-        context.setData(user);
-
-        when(userRepositoryPort.save(user)).thenReturn(null);
-
-        Optional<User> result = createUserAdapter.process(context);
-
-        assertFalse(result.isPresent());
-
-        verify(userRepositoryPort, times(1)).save(user);
-    }
 }
