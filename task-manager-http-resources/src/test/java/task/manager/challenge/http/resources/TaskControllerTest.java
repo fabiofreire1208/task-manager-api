@@ -20,7 +20,7 @@ import task.manager.challenge.domain.model.Task;
 import task.manager.challenge.domain.model.User;
 import task.manager.challenge.http.resources.controllers.TaskController;
 import task.manager.challenge.http.resources.dto.TaskDto;
-import task.manager.challenge.http.resources.dto.TaskResponseDto;
+import task.manager.challenge.http.resources.dto.response.TaskResponseDto;
 import task.manager.challenge.http.resources.dto.TaskStatusDto;
 import task.manager.challenge.http.resources.dto.UserAssignDto;
 import task.manager.challenge.http.resources.mappers.TaskModelMapper;

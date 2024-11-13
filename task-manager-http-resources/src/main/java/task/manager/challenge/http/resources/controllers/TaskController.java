@@ -11,7 +11,7 @@ import task.manager.challenge.domain.enums.TaskPriority;
 import task.manager.challenge.domain.enums.TaskStatus;
 import task.manager.challenge.domain.model.Task;
 import task.manager.challenge.http.resources.dto.TaskDto;
-import task.manager.challenge.http.resources.dto.TaskResponseDto;
+import task.manager.challenge.http.resources.dto.response.TaskResponseDto;
 import task.manager.challenge.http.resources.dto.TaskStatusDto;
 import task.manager.challenge.http.resources.dto.UserAssignDto;
 import task.manager.challenge.http.resources.mappers.TaskModelMapper;

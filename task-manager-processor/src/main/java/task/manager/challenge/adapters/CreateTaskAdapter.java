@@ -31,9 +31,11 @@ public class CreateTaskAdapter implements CreateTaskPort {
     @Override
     public Optional<Task> process(Context context) {
         final Task data = context.getData(Task.class);
-        final User userToAssign = userRepositoryPort.get(data.getAssignedUser().getId()).orElseThrow(
-                () -> new UserNotFoundException("User not found!")
-        );
+        if(Optional.ofNullable(data.getAssignedUser()).isPresent()) {
+            final User userToAssign = userRepositoryPort.get(data.getAssignedUser().getId()).orElseThrow(
+                    () -> new UserNotFoundException("User not found!")
+            );
+        }
 
         final Project project = projectRepositoryPort.get(data.getProject().getId()).orElseThrow(
                 () -> new ProjectNotFoundException("Project not found!")
