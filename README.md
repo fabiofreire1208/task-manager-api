@@ -148,6 +148,27 @@ curl --request GET \
   --url 'http://localhost:8080/tasks/filter?page=0&size=10&status=IN_PROGRESS' \
   --header 'User-Agent: insomnia/10.1.0'
 ```
+List Users
+```shell
+curl --request GET \
+  --url http://localhost:8080/users/list \
+  --header 'User-Agent: insomnia/10.1.0'
+```
+
+List Projects
+```shell
+curl --request GET \
+  --url http://localhost:8080/projects/list \
+  --header 'User-Agent: insomnia/10.1.0'
+```
+
+List Devices
+```shell
+curl --request GET \
+  --url http://localhost:8080/devices/list \
+  --header 'User-Agent: insomnia/10.1.0'
+```
+
 ## Running the Project
 
 To start the project, you need to use Docker Compose. Make sure Docker and Docker Compose are installed on your machine. The docker-compose.yml file can be found in the root folder of the project.

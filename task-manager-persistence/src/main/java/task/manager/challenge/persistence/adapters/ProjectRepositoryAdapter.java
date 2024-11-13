@@ -7,6 +7,7 @@ import task.manager.challenge.domain.model.Project;
 import task.manager.challenge.persistence.mappers.PersistenceEntityMapper;
 import task.manager.challenge.persistence.repository.ProjectRepository;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,5 +35,13 @@ public class ProjectRepositoryAdapter implements ProjectRepositoryPort {
                 .orElse(null);
 
         return Objects.nonNull(project) ? Optional.of(project) : Optional.empty();
+    }
+
+    @Override
+    public List<Optional<Project>> findAllProjects() {
+        return projectRepository.findAll().stream()
+                .map(mapper::from)
+                .map(Optional::of)
+                .toList();
     }
 }

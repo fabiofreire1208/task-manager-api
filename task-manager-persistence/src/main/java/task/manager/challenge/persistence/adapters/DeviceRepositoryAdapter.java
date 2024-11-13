@@ -7,6 +7,7 @@ import task.manager.challenge.domain.model.Device;
 import task.manager.challenge.persistence.mappers.PersistenceEntityMapper;
 import task.manager.challenge.persistence.repository.DeviceRepository;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,5 +35,13 @@ public class DeviceRepositoryAdapter implements DeviceRepositoryPort {
                 .orElse(null);
 
         return Objects.nonNull(device) ? Optional.of(device) : Optional.empty();
+    }
+
+    @Override
+    public List<Optional<Device>> findAllDevices() {
+        return deviceRepository.findAll().stream()
+                .map(mapper::from)
+                .map(Optional::of)
+                .toList();
     }
 }

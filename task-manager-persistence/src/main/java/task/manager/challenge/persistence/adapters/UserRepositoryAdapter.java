@@ -7,6 +7,7 @@ import task.manager.challenge.domain.model.User;
 import task.manager.challenge.persistence.mappers.PersistenceEntityMapper;
 import task.manager.challenge.persistence.repository.UserRepository;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,5 +43,14 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
                 .map(mapper::from)
                 .orElse(null);
         return Objects.nonNull(user) ? Optional.of(user) : Optional.empty();
+    }
+
+    @Override
+    public List<Optional<User>> findAllUsers() {
+        return userRepository.findAll().stream()
+                .map(mapper::from)
+                .map(Optional::of)
+                .toList();
+
     }
 }
